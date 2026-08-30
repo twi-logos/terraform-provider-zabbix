@@ -35,7 +35,7 @@ jobs:
         run: go vet ./...
       -
         name: Test
-        run: go test ./provider/
+        run: TF_ACC= go test ./...
       -
         name: gofmt
         run: |

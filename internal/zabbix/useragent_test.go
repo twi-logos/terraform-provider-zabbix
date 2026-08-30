@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -29,6 +30,35 @@ func TestUserAgent(t *testing.T) {
 			}
 			if got != tc.want {
 				t.Errorf("User-Agent = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestNewAPIMinimumVersion(t *testing.T) {
+	for _, tc := range []struct {
+		version string
+		wantErr string
+	}{
+		{version: "7.2.99", wantErr: "Zabbix 7.4 or newer is required; server reports 7.2.99"},
+		{version: "7.4.0"},
+		{version: "8.0.0"},
+	} {
+		t.Run(tc.version, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				fmt.Fprintf(w, `{"jsonrpc":"2.0","result":%q,"id":1}`, tc.version)
+			}))
+			defer srv.Close()
+
+			_, err := NewAPI(Config{Url: srv.URL})
+			if tc.wantErr == "" {
+				if err != nil {
+					t.Fatal(err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("NewAPI() error = %v, want containing %q", err, tc.wantErr)
 			}
 		})
 	}

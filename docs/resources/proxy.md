@@ -9,24 +9,10 @@ description: |-
 
 Manages a Zabbix proxy: a collector that monitors hosts on the server's behalf. Exposes one set of attribute names across every supported Zabbix version.
 
-## One set of attribute names, every version
+## Proxy attributes
 
-Zabbix 7.0 rewrote the proxy object: every mode-dependent property was renamed,
-and the separate proxy interface was folded into the proxy itself. This
-resource exposes one set of attribute names on every supported version and
-translates underneath, so the same configuration applies unchanged to a 6.0
-server and to a 7.4 one:
-
-| Attribute | Zabbix 6.0 / 6.4 | Zabbix 7.0 and later |
-|---|---|---|
-| `name` | `host` | `name` |
-| `operating_mode` | `status` (`5` active, `6` passive) | `operating_mode` (`0` active, `1` passive) |
-| `address`, `port` | nested `interface` object (`useip`/`ip`/`dns`/`port`) | `address`, `port` |
-| `allowed_addresses` | `proxy_address` | `allowed_addresses` |
-| `description`, `tls_*` | unchanged | unchanged |
-
-`address` accepts either an IP address or a DNS name; below 7.0 the provider
-sets the interface's `useip`, `ip` and `dns` from the shape of the value.
+The resource uses the Zabbix 7.4 proxy model. `address` accepts either an IP
+address or a DNS name.
 
 ## Attributes and operating mode
 
@@ -43,10 +29,9 @@ Zabbix validates a proxy strictly by mode, and so does this resource:
 
 ## Proxy groups
 
-Proxy groups are Zabbix 7.0's other proxy-related addition and are **not**
-handled here: the `proxy_groupid`, `local_address` and `local_port` properties
-are not exposed, pending a `zabbix_proxygroup` resource to give them something
-to point at.
+Proxy groups are **not** handled here: the `proxy_groupid`, `local_address` and
+`local_port` properties are not exposed, pending a `zabbix_proxygroup` resource
+to give them something to point at.
 
 ## Example Usage
 

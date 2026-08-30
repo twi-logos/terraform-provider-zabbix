@@ -1,4 +1,4 @@
-# requires Zabbix 6.2 or later
+# requires Zabbix 7.4 or later
 data "zabbix_templategroup" "applications" {
   name = "Templates/Applications"
 }

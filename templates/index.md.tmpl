@@ -11,7 +11,7 @@ template groups, proxies, items, item prototypes, low-level discovery rules,
 triggers and graphs — over the Zabbix JSON-RPC API.
 
 ~> **Upgrading from `v0.17.0`?** `v2.0.0` is deliberately a breaking release:
-the minimum Zabbix version moved to 6.0, `zabbix_application` and the two
+the minimum Zabbix version moved to 7.4, `zabbix_application` and the two
 aggregate item resources were removed, and four collections became sets —
 `graph.item`, `host.interface`, the LLD filter `condition`, and `macro` on
 hosts and templates, none of which can be indexed with `[0]` any more. Read
@@ -22,28 +22,13 @@ before you plan.
 
 | Tier | Versions | Commitment |
 |---|---|---|
-| Supported — CI-gated | 6.0 LTS, 7.0 LTS, 7.4 | the full acceptance suite must pass before a release |
+| Supported — CI-gated | 7.4 and later stable releases | the full acceptance suite must pass before a release |
 | Early warning — non-blocking | 8.0 (`ubuntu-trunk` nightly) | in the test matrix, reported but never gating |
-| Dropped | 4.0, 5.0, 5.4 | code paths deleted, not merely untested |
-
-The floor tracks Zabbix's own limited-support window: 6.0 leaves limited
-support on **2027-02-28**, at which point the floor moves to 7.0.
+| Dropped | all versions below 7.4 | provider configuration rejects these servers |
 
 The provider probes `apiinfo.version` when it configures, before authenticating,
-and adapts to the server it finds: bearer-token auth on 6.4+, the rewritten
-proxy model on 7.0+, `selectHostGroups` / `selectTemplateGroups` on 7.2+. There
-is nothing to configure. An attribute that does not exist on your server is
-refused rather than silently dropped — from Zabbix 7.0 an unknown property is a
-hard API error, and a value quietly discarded is worse than one rejected.
-
-Everything is available on Zabbix 6.0 except:
-
-| Resource / attribute | Minimum |
-|---|---|
-| `zabbix_templategroup`, `data.zabbix_templategroup` | 6.2 |
-| `zabbix_template.groups` means *template* group ids | 6.2 (host group ids below) |
-| `zabbix_template.vendor_name`, `.vendor_version` | 6.4 |
-| `zabbix_template.readme`, `.wizard_ready` | 7.4 |
+and rejects servers below Zabbix 7.4. There is nothing to configure. Every
+resource and attribute requires Zabbix 7.4 or newer.
 
 ## Authentication
 

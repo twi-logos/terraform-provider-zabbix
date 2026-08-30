@@ -2,21 +2,19 @@
 page_title: "zabbix_templategroup Data Source - Zabbix"
 subcategory: "Hosts and Templates"
 description: |-
-  Looks up an existing Zabbix template group by name. Requires Zabbix 6.2 or later.
+  Looks up an existing Zabbix template group by name.
 ---
 
 # zabbix_templategroup (Data Source)
 
-Looks up an existing Zabbix template group by name. Requires Zabbix 6.2 or later.
+Looks up an existing Zabbix template group by name.
 
-Requires **Zabbix 6.2 or later**, where template groups exist as a separate
-object. On 6.0 and 6.1 templates are members of host groups — use the
-[`zabbix_hostgroup`](hostgroup) data source instead.
+Returns a Zabbix template group by name.
 
 ## Example Usage
 
 ```terraform
-# requires Zabbix 6.2 or later
+# requires Zabbix 7.4 or later
 data "zabbix_templategroup" "applications" {
   name = "Templates/Applications"
 }

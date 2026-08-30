@@ -17,7 +17,11 @@ the module major and the Registry version all read the same.
 
 ## [Unreleased]
 
-Nothing yet.
+### Changed
+
+- **Breaking:** the minimum supported Zabbix version is now 7.4. Provider
+  configuration rejects older servers, and the release-gating acceptance
+  matrix no longer includes Zabbix 6.0 or 7.0.
 
 ---
 

@@ -9,14 +9,12 @@ description: |-
 
 Looks up an existing Zabbix proxy by its technical name.
 
-Attribute names match the [`zabbix_proxy`](../resources/proxy) resource and are
-the same on every supported Zabbix version; see that page for how they map onto
-the pre-7.0 and 7.0+ forms of the proxy object.
+Attribute names match the [`zabbix_proxy`](../resources/proxy) resource.
 
 `tls_psk_identity` and `tls_psk` are write-only in the Zabbix API and are
 therefore not available from this data source.
 
-`host` is the pre-7.0 name of `name` and is deprecated but still accepted.
+`host` is a deprecated alias of `name` and is still accepted.
 Exactly one of `host` or `name` must be given.
 
 ## Example Usage

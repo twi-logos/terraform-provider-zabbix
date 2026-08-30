@@ -55,7 +55,7 @@ func stubAPI(t *testing.T, itemType *zabbix.ItemType) *zabbix.API {
 			// 7.0 rather than 6.0: the version only reaches version gates on
 			// the write path here, and picking the floor would leave the
 			// newest gates untested by accident
-			result = "7.0.29"
+			result = "7.4.14"
 		case "item.get", "itemprototype.get":
 			result = []map[string]interface{}{{
 				"itemid":        "12345",

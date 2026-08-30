@@ -43,12 +43,9 @@ git status --porcelain                 # must print nothing
 gofmt -l .                             # must print nothing
 make check-toolchain
 make build vet test
-go test ./...                          # `make test` covers ./provider only;
-                                       # internal/zabbix's redaction tests are
-                                       # not in it, and not in ci.yml either
 make docs-check                        # docs/ must be current with the schema;
                                        # ci.yml does NOT run this, so it is on you
-make testacc                           # 6.0 + 7.0 + 7.4 — the release gate
+make testacc                           # 7.4 — the release gate
 make testall                           # adds 8.0; read it, do not gate on it
 ```
 

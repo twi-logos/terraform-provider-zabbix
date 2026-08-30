@@ -200,6 +200,10 @@ func NewAPI(c Config) (api *API, err error) {
 	if err != nil {
 		return
 	}
+	if version < V74 {
+		err = fmt.Errorf("Zabbix 7.4 or newer is required; server reports %s", rawVersion)
+		return
+	}
 	api.Config.Version = int(version)
 
 	return

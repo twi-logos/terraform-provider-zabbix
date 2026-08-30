@@ -25,23 +25,23 @@ multi-version acceptance harness, [MAINTAINING.md](./MAINTAINING.md) and
 ```bash
 make build      # go build ./...
 make vet        # go vet ./...
-make test       # go test ./provider/ -- schema and state-migration unit tests, no server
+make test       # go test ./... -- client, schema and state-migration unit tests, no server
 gofmt -l .      # must print nothing; CI fails on any output
 make            # lists every target
 ```
 
-`make test` is fast and needs nothing running. It covers the schema
+`make test` is fast and needs nothing running. It covers the API client, schema
 consistency checks (`provider/schema_enum_test.go`) and the state upgraders
 against checked-in `v0.17.0` fixtures.
 
 ## Acceptance tests
 
-Acceptance tests talk to real Zabbix servers and mutate them. Four stacks —
-6.0, 7.0, 7.4 and 8.0-trunk — come up with plain `docker compose`:
+Acceptance tests talk to real Zabbix servers and mutate them. Two stacks —
+7.4 and 8.0-trunk — come up with plain `docker compose`:
 
 ```bash
-make testenv-up                                 # all four, waits until the APIs answer
-make testacc                                    # 6.0 + 7.0 + 7.4, the release gate
+make testenv-up                                 # both, waits until the APIs answer
+make testacc                                    # 7.4, the release gate
 make test-one TEST=TestAccResourceHost VER=74   # day-to-day iteration
 ```
 
@@ -58,7 +58,7 @@ per-version logs, the 8.0 caveat, adding a Zabbix version, and troubleshooting.
 | `docs/` | **generated** registry documentation — do not hand-edit |
 | `templates/` | hand-written prose that `tfplugindocs` renders into `docs/` |
 | `examples/` | runnable HCL, pulled into the generated pages |
-| `docker-compose.test.yml` | the four Zabbix test stacks |
+| `docker-compose.test.yml` | the supported and early-warning Zabbix test stacks |
 
 ### The API client is in-tree
 
@@ -167,7 +167,8 @@ integers or a version string:
 | `zabbix.V72` | 7.2 | `selectHostGroups`/`selectTemplateGroups` replace `selectGroups` |
 | `zabbix.V74` | 7.4 | template `readme`/`wizard_ready` — its only use in the tree today |
 
-6.0 is the floor, so **no gate below `V62` is meaningful** — do not add one.
+7.4 is the floor. Do not add behavior for older servers. Older constants may
+remain where state migration or historical tests reference them.
 
 Two things that are easy to get wrong here, both learned empirically:
 
@@ -258,7 +259,7 @@ Fuller version, with the reasoning, in
 - `master` and `testenv` are **frozen**. All work happens on `v2`.
 - `gofmt -l .` must print nothing before every commit.
 - `go build ./...`, `go vet ./...` and `go test ./provider/` must pass; the
-  acceptance matrix must be green on 6.0, 7.0 and 7.4 before a release.
+  Zabbix 7.4 acceptance gate must be green before a release.
 - One reviewed change per fix. The thirty-five defects listed in the v2.0.0
   changelog were found during the v2 revival, and each landed on its own.
 - User-visible changes get a [CHANGELOG.md](./CHANGELOG.md) entry under

@@ -9,25 +9,19 @@ description: |-
 
 {{ .Description | trimspace }}
 
-## `groups` means different things on different servers
+## Template groups
 
-On Zabbix 6.2 and later, `groups` holds **template** group ids
-([`zabbix_templategroup`](templategroup)). On 6.0 and 6.1, template groups do
-not exist and it holds host group ids ([`zabbix_hostgroup`](hostgroup)). The id
-spaces are disjoint, so a configuration written for one will not apply to the
-other — see
-[MIGRATING.md § 5](https://github.com/tpretz/terraform-provider-zabbix/blob/v2/MIGRATING.md#5-zabbix_templategroups-now-means-template-groups).
+`groups` holds **template** group ids from
+[`zabbix_templategroup`](templategroup).
 
 ## Version-gated attributes
 
 | Attribute | Requires |
 |---|---|
-| `vendor_name`, `vendor_version` | Zabbix 6.4 — and must be set together |
-| `readme`, `wizard_ready` | Zabbix 7.4 |
+| `vendor_name`, `vendor_version` | must be set together |
+| `readme`, `wizard_ready` | Zabbix 7.4 or newer |
 
-These are refused rather than silently dropped on an older server: from Zabbix
-7.0 an unknown object property is a hard API error, and a value quietly
-discarded is worse than one rejected.
+Servers below Zabbix 7.4 are rejected during provider configuration.
 
 ## Example Usage
 

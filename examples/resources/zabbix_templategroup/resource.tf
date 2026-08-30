@@ -1,4 +1,4 @@
-# template groups were split out of host groups in Zabbix 6.2
+# requires Zabbix 7.4 or later
 resource "zabbix_templategroup" "applications" {
   name = "Templates/Applications"
 }

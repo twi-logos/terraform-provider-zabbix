@@ -27,9 +27,7 @@ type rather than asking for a delete-and-recreate.
 ## Proxy assignment
 
 `proxyid` is the id of the proxy monitoring this host, or `"0"` for the Zabbix
-server itself. On Zabbix 7.0 and later the provider also sets `monitored_by`
-to match; below 7.0 it writes the old `proxy_hostid` property. The
-configuration is the same either way.
+server itself. The provider sets `monitored_by` to match.
 
 ## Write-only attributes
 

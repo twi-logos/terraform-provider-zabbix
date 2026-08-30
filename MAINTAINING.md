@@ -34,7 +34,7 @@ The nightly opens **one** issue labelled `nightly-failure` and comments on it
 thereafter, so a persistent break does not produce a new issue every night.
 Close it when the run goes green; the next failure opens a fresh one.
 
-- A failure on **6.0, 7.0 or 7.4** is release-gating. It either blocks the next
+- A failure on **7.4** is release-gating. It either blocks the next
   release or gets reverted.
 - A failure on **8.0 alone opens nothing**. That job is `continue-on-error` and
   tracks the moving `ubuntu-trunk` image; read it, do not gate on it. It exists
@@ -226,8 +226,8 @@ is why they are listed here.
 
 ### 8. Drop the version that fell out of support
 
-The floor tracks Zabbix's own **limited support** window, so a version leaves
-when Zabbix stops supporting it, not when it becomes inconvenient.
+The supported floor is Zabbix 7.4. Older servers are rejected during provider
+configuration and are absent from the test matrix.
 
 | Version | Released | Full support ends | Limited support ends |
 |---|---|---|---|
@@ -236,23 +236,18 @@ when Zabbix stops supporting it, not when it becomes inconvenient.
 | 7.4 | 2025-07-01 | until 8.0 LTS | Q4 2026 |
 | 8.0 LTS | Q3 2026 | Q3 2029 | Q3 2031 |
 
-Raising the floor is a **breaking change and needs a major version**, because
-gated code is deleted rather than merely untested — that is the deal this
-project made with itself in PLAN.md, and it is what makes the codebase stay
-small. The procedure, which Phase 2b is the worked example of:
+Raising the floor is a **breaking change and needs a major version**. The
+procedure is:
 
 1. Remove the version from `VERSIONS`, `GATED`, the compose file and the
    nightly matrix.
-2. Delete every gate below the new floor and the path it guarded — `grep -rn
-   'zabbix\.V6' provider/ internal/` — plus the schema attributes that only
-   existed for it. Phase 2b removed 1396 lines this way.
-3. Delete the acceptance-test `SkipFunc`s that referenced those gates.
+2. Enforce the floor when `NewAPI` reads `apiinfo.version`.
+3. Remove obsolete gates and acceptance skips when doing so does not disturb
+  state migration or current-version behavior.
 4. Write the `MIGRATING.md` section: what was removed, and the before/after.
 5. Note it in `CHANGELOG.md` under a new major version.
 
-The next one due is **6.0 on 2027-02-28**, which makes 7.0 the floor and
-removes the `V62` and `V64` gates: template groups and bearer auth stop being
-conditional.
+The floor was explicitly raised to **7.4 on 2026-08-30**.
 
 ---
 

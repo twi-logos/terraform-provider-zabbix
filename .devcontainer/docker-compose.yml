@@ -8,7 +8,7 @@
 #
 # Because both files merge into one compose project, `dev` shares the project's
 # default network with the Zabbix stacks and reaches them by service name
-# (zabbix-web-60, zabbix-web-70, …) on port 8080. devcontainer.json sets
+# (zabbix-web-74, zabbix-web-80) on port 8080. devcontainer.json sets
 # ZBX_IN_CONTAINER=1 so the Makefile resolves ZABBIX_URL that way rather than
 # via the published localhost ports.
 services:

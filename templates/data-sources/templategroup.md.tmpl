@@ -9,9 +9,7 @@ description: |-
 
 {{ .Description | trimspace }}
 
-Requires **Zabbix 6.2 or later**, where template groups exist as a separate
-object. On 6.0 and 6.1 templates are members of host groups — use the
-[`zabbix_hostgroup`](hostgroup) data source instead.
+Returns a Zabbix template group by name.
 
 ## Example Usage
 

@@ -1,5 +1,9 @@
 # Upgrading from v0.17.0 to v2.0.0
 
+> **Unreleased support-floor change:** the next major provider release requires
+> Zabbix 7.4 or newer. Upgrade the Zabbix server before upgrading the provider.
+> Provider configuration fails before authentication on older servers.
+
 `v2.0.0` is the first release of this provider in a long time, and it is
 deliberately a breaking one. There is no `v1.x`: the version was skipped so the
 major number matches the branch the work was done on.

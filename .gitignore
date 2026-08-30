@@ -1,4 +1,5 @@
 terraform-provider-zabbix
+dev-bin/
 .terraform
 crash.log
 # per-version acceptance-test logs (see TESTING.md)

@@ -2,11 +2,11 @@
 
 Baseline: Zabbix 7.4 API reference (59 documented API objects).
 Provider state: all phases complete, v2.0.0 ready to cut.
-Verified against live 6.0.48 / 7.0.29 / 7.4.13 / 8.0-trunk servers.
+Current matrix: live 7.4.14 release gate plus 8.0-trunk non-blocking early warning.
 
-Target support floor is **Zabbix 6.0 LTS** (see [PLAN.md](./PLAN.md)) — anything marked
-💀 below is removed from the API at or before 6.0 and is scheduled for deletion, not
-repair.
+The support floor is **Zabbix 7.4**. Provider configuration rejects older
+servers. Older-version observations below are retained as API history, not a
+support commitment.
 
 Legend: ✅ full · 🟡 partial · ❌ none · 💀 dead (API removed upstream)
 
@@ -198,10 +198,8 @@ Two findings that contradicted the original assumptions:
 | 7.4 | 2025-07-01 | until 8.0 LTS | Q4 2026 |
 | 8.0 LTS | Q3 2026 (imminent) | Q3 2029 | Q3 2031 |
 
-Target matrix: **6.0, 7.0, 7.4** release-gating, plus **8.0** non-blocking via the
-nightly `ubuntu-trunk` images from day one (no `*8.0*` tag is published yet as of
-2026-08-02), promoted to release-gating on GA. The floor moves to 7.0 when 6.0 leaves
-limited support on 2027-02-28.
+Target matrix: **7.4** release-gating, plus **8.0** non-blocking via the nightly
+`ubuntu-trunk` images until GA.
 
 ## 7. Sources
 

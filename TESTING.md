@@ -6,9 +6,7 @@ required.
 
 | Version | Role | Web UI | Image |
 |---|---|---|---|
-| 6.0 LTS | gating (version floor) | http://localhost:8060/ | `ubuntu-6.0.48` |
-| 7.0 LTS | gating | http://localhost:8070/ | `ubuntu-7.0.29` |
-| 7.4 | gating (current release) | http://localhost:8074/ | `ubuntu-7.4.13` |
+| 7.4 | gating (version floor) | http://localhost:8074/ | `ubuntu-7.4.14` |
 | 8.0 | **early warning, non-blocking** | http://localhost:8080/ | `ubuntu-trunk` |
 
 Credentials for every stack: `Admin` / `zabbix`.
@@ -31,13 +29,13 @@ Credentials for every stack: `Admin` / `zabbix`.
 ## Quick start
 
 ```bash
-make testenv-up        # bring up all four stacks, wait until their APIs answer
+make testenv-up        # bring up both stacks, wait until their APIs answer
 make testenv-verify    # print each stack's apiinfo.version
-make testacc           # acceptance tests on 6.0 / 7.0 / 7.4
+make testacc           # acceptance tests on 7.4
 make testenv-down      # tear down and delete the database volumes
 ```
 
-Four full Zabbix stacks is a lot of laptop RAM. To work against just one:
+To work against just one stack:
 
 ```bash
 make testenv-up-74
@@ -53,7 +51,7 @@ make testenv-down-74
 
 ```bash
 make test-one TEST=TestAccResourceHost VER=74   # single test, single version
-make test-one TEST='TestAccResourceItem.*' VER=70
+make test-one TEST='TestAccResourceItem.*' VER=74
 ```
 
 `TEST` is a Go test regex (`go test -run`). `VER` defaults to `74`.
@@ -61,8 +59,8 @@ make test-one TEST='TestAccResourceItem.*' VER=70
 Whole-version runs, and the two aggregates:
 
 ```bash
-make test60 / test70 / test74 / test80   # one version, whole suite
-make testacc                             # 6.0 + 7.0 + 7.4 — the release gate
+make test74 / test80                     # one version, whole suite
+make testacc                             # 7.4 — the release gate
 make testall                             # testacc plus 8.0 (reported, never gating)
 ```
 
@@ -161,22 +159,23 @@ identically.
 
 ## Current status
 
-**Green on all four versions.** 193 tests, 158 of them
-acceptance, roughly 375–395s per version:
+The supported-version gate has passed against the current 7.4.14 pin:
 
 | Version | Result | Skips |
 |---|---|---|
-| 6.0.48 | pass | 3 — the `zabbix_templategroup` tests, gated to 6.2+ |
-| 7.0.29 | pass | 1 |
-| 7.4.13 | pass | 1 |
+| 7.4.14 | pass (full suite, 2026-08-30, 641.988s) | 0 top-level tests |
 | 8.0-trunk | pass | 1 |
 
-The remaining skip on 7.0 and above is `TestAccResourceTemplategroupUnsupported`,
-which exists to prove the pre-6.2 rejection and has nothing to reject on a
-server that has template groups. Individual *steps* are also skipped by version
-throughout the suite — `SkipFunc: skipBelow(t, zabbix.V70)` and friends — and
-those do not show in the skip count, because the test they belong to still
-passes.
+Focused proof on 2026-08-30 used Terraform 1.8.5 and exact Zabbix 7.4.14:
+
+```bash
+make test-one TEST=TestAccUpdateActionTrigger VER=74
+make test-one TEST=TestAccRemoveActionTriggerDefaults VER=74
+```
+
+Both focused tests passed, including create, update, import, removal of explicit
+default state, and destroy checks. A subsequent full `make test74` run also
+passed.
 
 Getting here was PLAN.md phases 0-3 plus phase 8. The baseline this file used to
 record — 7.4 and 8.0 failing wholesale on `Invalid parameter "/": unexpected
