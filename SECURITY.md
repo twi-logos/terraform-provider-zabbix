@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Report privately, not as a public issue: use GitHub's
-[private vulnerability reporting](https://github.com/tpretz/terraform-provider-zabbix/security/advisories/new)
+[private vulnerability reporting](https://github.com/twi-logos/terraform-provider-zabbix/security/advisories/new)
 on this repository.
 
 This is a volunteer-maintained provider. Expect an acknowledgement within a week and a

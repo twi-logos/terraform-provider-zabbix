@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // The fixtures below are transcribed from trigger.get responses captured

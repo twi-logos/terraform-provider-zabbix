@@ -128,7 +128,7 @@ Nothing runs: Actions is still off repository-wide, and every workflow is
 Settings → Actions → General → *Allow all actions and reusable workflows*.
 
 ```bash
-gh api repos/tpretz/terraform-provider-zabbix/actions/permissions
+gh api repos/twi-logos/terraform-provider-zabbix/actions/permissions
 # {"enabled":true,...}
 ```
 
@@ -261,8 +261,8 @@ exports the `fingerprint` output the goreleaser step consumes. That path has
 therefore **never run**, which is a second reason step 8 watches the run rather
 than tagging and walking away.
 
-Also confirm the *public* half of the same key is still registered against the
-`tpretz` namespace in the Terraform Registry (Registry → User settings →
+Also confirm the *public* half of the same key is registered against the
+`twi-logos` namespace in the Terraform Registry (Registry → User settings →
 Signing keys). It was, for the `v0.x` releases; if the key has been rotated
 since, upload the new one **before** tagging, or the Registry will ingest the
 release and then reject its signature.
@@ -300,7 +300,7 @@ an empty body is a support burden.
 Ingestion is webhook-driven and usually takes a few minutes.
 
 ```bash
-curl -s https://registry.terraform.io/v1/providers/tpretz/zabbix/versions \
+curl -s https://registry.terraform.io/v1/providers/twi-logos/zabbix/versions \
   | python3 -m json.tool | grep -A2 '"2.0.0"'
 ```
 
@@ -310,7 +310,7 @@ Then the real test, in a scratch directory:
 terraform {
   required_providers {
     zabbix = {
-      source  = "tpretz/zabbix"
+      source  = "twi-logos/zabbix"
       version = "~> 2.0"
     }
   }
@@ -327,7 +327,7 @@ key that is not registered, or a binary whose name does not match
 `terraform-provider-zabbix_v2.0.0`.
 
 The documentation pages come from `docs/` in the tagged commit. Check that
-`https://registry.terraform.io/providers/tpretz/zabbix/latest/docs` renders the
+`https://registry.terraform.io/providers/twi-logos/zabbix/latest/docs` renders the
 index and that the sidebar shows the seven subcategories; if a page is missing,
 `docs/` was stale at tag time, which `make docs-check` in step 0 exists to
 prevent.
@@ -339,7 +339,7 @@ until it is. Kept here for the `master` archiving half, and for the ordering to 
 sense read end to end.
 
 ```bash
-gh repo edit tpretz/terraform-provider-zabbix --default-branch v2
+gh repo edit twi-logos/terraform-provider-zabbix --default-branch v2
 ```
 
 This is what activates **Dependabot** — it reads `.github/dependabot.yml` from

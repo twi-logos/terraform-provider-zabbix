@@ -112,7 +112,7 @@ type API struct {
 // nothing, so the client stays usable on its own terms.
 func userAgent(s string) string {
 	if s == "" {
-		return "github.com/tpretz/terraform-provider-zabbix"
+		return "github.com/twi-logos/terraform-provider-zabbix"
 	}
 	return s
 }

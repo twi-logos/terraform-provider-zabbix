@@ -1,10 +1,10 @@
 /*
 Package zabbix is the Zabbix JSON-RPC API client used by terraform-provider-zabbix.
 
-It began life as the standalone library github.com/tpretz/go-zabbix-api, vendored
-here as a git submodule and merged into the provider in v2. It is deliberately an
-internal package: the provider is its only consumer, and it is free to change shape
-whenever the provider needs it to.
+It began life as the standalone go-zabbix-api library, vendored here as a git
+submodule and merged into the provider in v2. It is deliberately an internal
+package: the provider is its only consumer, and it is free to change shape whenever
+the provider needs it to.
 
 # Supported versions
 

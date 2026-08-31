@@ -47,7 +47,7 @@ Actions is switched off repository-wide, **and** `.github/workflows/release.yml`
 
 ## The API client: internal/zabbix
 
-The provider's Zabbix API client lives at **`internal/zabbix`**. It used to be a git submodule (`github.com/tpretz/go-zabbix-api`) wired in with a `replace` directive; that was retired in Phase 0. There is no submodule, no `.gitmodules`, and no `replace` — `git submodule status` returns nothing. The client's full history was rewritten under `internal/zabbix/` before merging, so `git blame` and `git log --follow` work on it.
+The provider's Zabbix API client lives at **`internal/zabbix`**. It used to be a standalone `go-zabbix-api` git submodule wired in with a `replace` directive; that was retired in Phase 0. There is no submodule, no `.gitmodules`, and no `replace` — `git submodule status` returns nothing. The client's full history was rewritten under `internal/zabbix/` before merging, so `git blame` and `git log --follow` work on it.
 
 Because it is an `internal/` package it cannot be imported outside this module, which is intended — the provider is its only consumer. Edit it directly; there is nothing to re-tag.
 

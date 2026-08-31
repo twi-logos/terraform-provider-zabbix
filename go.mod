@@ -1,4 +1,4 @@
-module github.com/tpretz/terraform-provider-zabbix
+module github.com/twi-logos/terraform-provider-zabbix
 
 go 1.25.8
 

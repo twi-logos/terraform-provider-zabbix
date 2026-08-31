@@ -55,7 +55,7 @@ Every resource and attribute requires Zabbix 7.4 or newer.
 terraform {
   required_providers {
     zabbix = {
-      source  = "tpretz/zabbix"
+      source  = "twi-logos/zabbix"
       version = "~> 2.0"
     }
   }

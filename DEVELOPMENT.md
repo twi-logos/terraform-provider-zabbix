@@ -62,11 +62,11 @@ per-version logs, the 8.0 caveat, adding a Zabbix version, and troubleshooting.
 
 ### The API client is in-tree
 
-`internal/zabbix` was a git submodule (`github.com/tpretz/go-zabbix-api`) until
-Phase 0. It is not any more: there is no `.gitmodules`, no `replace` directive,
-and `git submodule status` returns nothing. Edit it directly — there is nothing
-to re-tag. Being an `internal/` package it cannot be imported outside this
-module, which is intended; the provider is its only consumer.
+`internal/zabbix` was a standalone `go-zabbix-api` git submodule until Phase 0.
+It is not any more: there is no `.gitmodules`, no `replace` directive, and
+`git submodule status` returns nothing. Edit it directly — there is nothing to
+re-tag. Being an `internal/` package it cannot be imported outside this module,
+which is intended; the provider is its only consumer.
 
 ## Documentation
 

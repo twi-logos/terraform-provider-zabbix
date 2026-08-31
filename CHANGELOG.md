@@ -11,7 +11,7 @@ commit as the change. There is deliberately no changelog-fragment tool — see
 and for the one condition that should change that decision.
 
 Releases before `2.0.0` predate this file. Their history is the git log and the
-[GitHub releases](https://github.com/tpretz/terraform-provider-zabbix/releases)
+[GitHub releases](https://github.com/twi-logos/terraform-provider-zabbix/releases)
 page. There is no `1.x`: the major version was skipped so that the branch name,
 the module major and the Registry version all read the same.
 
@@ -149,9 +149,9 @@ watched non-blocking via the `ubuntu-trunk` nightly until it reaches GA.
   change in an existing configuration; it only stops the provider refusing a
   host the server would have created. See
   [MIGRATING.md §12](./MIGRATING.md#12-smaller-changes-that-need-no-action).
-- The Zabbix API client is no longer the `github.com/tpretz/go-zabbix-api` git
-  submodule; it lives in this repository as `internal/zabbix`, with its history
-  preserved. Nothing about this is visible in a configuration.
+- The Zabbix API client is no longer a standalone `go-zabbix-api` git submodule;
+  it lives in this repository as `internal/zabbix`, with its history preserved.
+  Nothing about this is visible in a configuration.
 - Toolchain: Go directive `1.25.8`, `terraform-plugin-sdk/v2` v2.40.1,
   `terraform-plugin-go` v0.31.0. The acceptance suite moved to
   `terraform-plugin-testing` v1.16.0. `.tool-versions` pins the versions actually
@@ -406,5 +406,5 @@ collections in 20, plus 21 and 22), and is written up in
   against this provider. It remains in history and on the frozen `master` branch.
 - The root `example.tf` scratch file, superseded by `examples/`.
 
-[Unreleased]: https://github.com/tpretz/terraform-provider-zabbix/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/tpretz/terraform-provider-zabbix/compare/v0.17.0...v2.0.0
+[Unreleased]: https://github.com/twi-logos/terraform-provider-zabbix/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/twi-logos/terraform-provider-zabbix/compare/v0.17.0...v2.0.0

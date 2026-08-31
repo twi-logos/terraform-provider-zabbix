@@ -17,7 +17,7 @@ in. They are therefore a `TypeSet`, and **set elements cannot be indexed** —
 `zabbix_host.example.interface[0].id` does not parse. Use `one(...)` for a host
 with a single interface, or a `for` expression with an `if` clause to pick one
 out by type or address. See
-[MIGRATING.md](https://github.com/tpretz/terraform-provider-zabbix/blob/v2/MIGRATING.md#6-sets-not-lists--and-sets-cannot-be-indexed)
+[MIGRATING.md](https://github.com/twi-logos/terraform-provider-zabbix/blob/v2/MIGRATING.md#6-sets-not-lists--and-sets-cannot-be-indexed)
 if you are upgrading from `v0.17.0`.
 
 Zabbix will not delete an interface that items are bound to. When an interface

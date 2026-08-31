@@ -15,7 +15,7 @@ import (
 func TestUserAgent(t *testing.T) {
 	for _, tc := range []struct{ name, configured, want string }{
 		{"caller supplies one", "terraform-provider-zabbix/2.0.0", "terraform-provider-zabbix/2.0.0"},
-		{"caller supplies none", "", "github.com/tpretz/terraform-provider-zabbix"},
+		{"caller supplies none", "", "github.com/twi-logos/terraform-provider-zabbix"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			var got string

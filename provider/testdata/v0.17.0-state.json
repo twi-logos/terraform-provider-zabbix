@@ -9,7 +9,7 @@
       "mode": "managed",
       "type": "zabbix_host",
       "name": "web01",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -75,7 +75,7 @@
       "mode": "managed",
       "type": "zabbix_template",
       "name": "linux",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -96,7 +96,7 @@
       "mode": "managed",
       "type": "zabbix_item_agent",
       "name": "cpu_load",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -123,7 +123,7 @@
       "mode": "managed",
       "type": "zabbix_item_snmp",
       "name": "if_in",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -167,7 +167,7 @@
       "mode": "managed",
       "type": "zabbix_proto_item_agent",
       "name": "fs_used",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -195,7 +195,7 @@
       "mode": "managed",
       "type": "zabbix_lld_agent",
       "name": "mounts",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -225,7 +225,7 @@
       "mode": "managed",
       "type": "zabbix_graph",
       "name": "cpu",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -277,7 +277,7 @@
       "mode": "managed",
       "type": "zabbix_proto_graph",
       "name": "fs",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -319,7 +319,7 @@
       "mode": "managed",
       "type": "zabbix_application",
       "name": "general",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -336,7 +336,7 @@
       "mode": "managed",
       "type": "zabbix_item_aggregate",
       "name": "cluster_load",
-      "provider": "provider[\"registry.terraform.io/tpretz/zabbix\"]",
+      "provider": "provider[\"registry.terraform.io/twi-logos/zabbix\"]",
       "instances": [
         {
           "schema_version": 0,
