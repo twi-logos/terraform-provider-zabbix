@@ -14,14 +14,14 @@ Summary of the decisions recorded there:
 |---|---|
 | Branch | All work on **`v2`**, cut from `testenv`. `master` and `testenv` are **frozen** — no commits, no backports, no re-tagging. The published `v0.x` releases stay as they are. |
 | Next release | **`v2.0.0`** (v1.x deliberately skipped), cut only when phases 0–3 are complete. |
-| Zabbix floor | **6.0 LTS.** 4.0, 5.0 and 5.4 support is being *deleted*, not merely untested. |
-| Test matrix | 6.0, 7.0, 7.4 release-gating; 8.0 via `ubuntu-trunk` non-blocking. |
+| Zabbix floor | **7.4.** Provider configuration rejects older servers. |
+| Test matrix | 7.4 release-gating; 8.0 via `ubuntu-trunk` non-blocking. |
 | API client | Merged into this repo as `internal/zabbix`; the submodule is retired. |
 
 ### Current state — measured, not guessed
 
-**The matrix is green on all four versions** — 193 tests, 158 of them acceptance, roughly
-375-395s per version:
+**The 7.4.14 release gate is green.** The older results are historical evidence,
+not a support commitment:
 
 | Version | Result |
 |---|---|
@@ -47,7 +47,7 @@ Actions is switched off repository-wide, **and** `.github/workflows/release.yml`
 
 ## The API client: internal/zabbix
 
-The provider's Zabbix API client lives at **`internal/zabbix`**. It used to be a git submodule (`github.com/tpretz/go-zabbix-api`) wired in with a `replace` directive; that was retired in Phase 0. There is no submodule, no `.gitmodules`, and no `replace` — `git submodule status` returns nothing. The client's full history was rewritten under `internal/zabbix/` before merging, so `git blame` and `git log --follow` work on it.
+The provider's Zabbix API client lives at **`internal/zabbix`**. It used to be a standalone `go-zabbix-api` git submodule wired in with a `replace` directive; that was retired in Phase 0. There is no submodule, no `.gitmodules`, and no `replace` — `git submodule status` returns nothing. The client's full history was rewritten under `internal/zabbix/` before merging, so `git blame` and `git log --follow` work on it.
 
 Because it is an `internal/` package it cannot be imported outside this module, which is intended — the provider is its only consumer. Edit it directly; there is nothing to re-tag.
 
@@ -58,18 +58,18 @@ Because it is an `internal/` package it cannot be imported outside this module, 
 ```bash
 go build ./...              # build the provider plugin
 go vet ./provider/
-go test ./provider/         # unit tests (schema validation) — no server needed
+go test ./...               # client and provider unit tests — no server needed
 ```
 
 ### Acceptance tests need live Zabbix (multi-version)
 
-`docker-compose.test.yml` in the repo root brings up four independent stacks — **6.0, 7.0,
-7.4 and 8.0** — each with its own PostgreSQL, on localhost ports 8060/8070/8074/8080. Plain
+`docker-compose.test.yml` in the repo root brings up two independent stacks — **7.4 and
+8.0** — each with its own PostgreSQL, on localhost ports 8074/8080. Plain
 `docker compose`; no devcontainer needed. Full bringup is about 12 seconds.
 
 ```bash
-make testenv-up            # all four; testenv-up-74 for one
-make testacc               # 6.0, 7.0, 7.4 - the release-gating set
+make testenv-up            # both; testenv-up-74 for one
+make testacc               # 7.4 - the release-gating set
 make testall               # adds 8.0, which is non-blocking
 make test-one TEST=TestAccResourceHost VER=74
 make testenv-down
@@ -101,9 +101,9 @@ Full details, including the current results table, are in [TESTING.md](./TESTING
 
 ### Version-aware API client
 
-`zabbix.NewAPI(Config)` (`internal/zabbix/base.go`) immediately calls `APIInfo.version` and stores the result in `Config.Version` as an **integer**: `major*10000 + minor*100 + patch` (e.g. 6.0.13 → 60013, 7.4 → 70400). Behaviour across the codebase branches on this number rather than a version string, because the provider must support a range of Zabbix versions. When something changed between Zabbix versions, gate it with `api.Config.Version >= NNNNN` and keep the old path.
+`zabbix.NewAPI(Config)` (`internal/zabbix/base.go`) immediately calls `APIInfo.version`, rejects versions below 7.4, and stores the result in `Config.Version` as an **integer**: `major*10000 + minor*100 + patch` (for example, 7.4 → 70400). Gate future-version deltas on named constants. Do not add or preserve behavior solely for servers below 7.4.
 
-With the 6.0 floor, the gates that **survive** are:
+Older gates may remain where state migration or historical tests reference them:
 
 | Gate | What it covers |
 |---|---|
@@ -257,12 +257,13 @@ Every `_ARR` is sorted at init (`TestEnumValueListsAreSorted`). This is not cosm
 
 `testAccPreCheck` (`provider/provider_test.go`) requires `ZABBIX_URL`, `ZABBIX_USER`, `ZABBIX_PASS`.
 
-Coverage is now **193 tests, 158 of them acceptance**, green on all four versions at roughly
-375–395s each. Every registered resource and data source has a test with an import step and
-a `CheckDestroy`; the only `ImportStateVerifyIgnore` in the suite is the PSK pair
+The release gate is the full acceptance suite against Zabbix 7.4.14. Zabbix 8.0 trunk is a
+non-blocking early-warning target until its stable release. Every registered resource and data
+source has a test with an import step and a `CheckDestroy`; the only
+`ImportStateVerifyIgnore` in the suite is the PSK pair
 (`tls_psk_identity`/`tls_psk`) on `zabbix_proxy` and `zabbix_host`, which `proxy.get` and
 `host.get` never return. Drift, negative paths, `ForceNew`, provider configuration and
-scalar boundaries are covered — see PLAN.md § Phase 8.
+scalar boundaries are covered; see `TESTING.md` for the current matrix and commands.
 
 **Do not treat that as licence to add a resource without tests.** Of the 35 defects fixed in
 v2, most were found by a test written where coverage was absent, and every one had been

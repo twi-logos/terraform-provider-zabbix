@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     zabbix = {
-      source  = "tpretz/zabbix"
+      source  = "twi-logos/zabbix"
       version = "~> 2.0"
     }
   }

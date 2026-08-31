@@ -1,5 +1,9 @@
 # Upgrading from v0.17.0 to v2.0.0
 
+> **Unreleased support-floor change:** the next major provider release requires
+> Zabbix 7.4 or newer. Upgrade the Zabbix server before upgrading the provider.
+> Provider configuration fails before authentication on older servers.
+
 `v2.0.0` is the first release of this provider in a long time, and it is
 deliberately a breaking one. There is no `v1.x`: the version was skipped so the
 major number matches the branch the work was done on.
@@ -50,7 +54,7 @@ Pin the new version explicitly rather than letting a constraint float into it:
 terraform {
   required_providers {
     zabbix = {
-      source  = "tpretz/zabbix"
+      source  = "twi-logos/zabbix"
       version = "~> 2.0"
     }
   }
@@ -62,6 +66,18 @@ Take a copy of your state before the first `terraform plan` under v2:
 ```bash
 terraform state pull > terraform.tfstate.v0.17.0.backup
 ```
+
+If state was written with a different provider source, migrate that address
+before planning:
+
+```bash
+terraform state replace-provider \
+  registry.terraform.io/<previous-namespace>/zabbix \
+  registry.terraform.io/twi-logos/zabbix
+```
+
+Replace `<previous-namespace>` with the namespace shown by
+`terraform providers` under "Providers required by state".
 
 State written by v2 cannot be read by v0.17.0 again — the schema versions have
 moved on. The backup is your only way back.
@@ -137,7 +153,7 @@ with an error like:
 
 ```
 Error: Invalid resource type
-  provider registry.terraform.io/tpretz/zabbix does not support resource type "zabbix_application"
+  provider registry.terraform.io/twi-logos/zabbix does not support resource type "zabbix_application"
 ```
 
 Delete the `resource` and `data` blocks from your configuration, then forget the

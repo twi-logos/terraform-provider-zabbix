@@ -3,7 +3,7 @@ on:
   schedule:
     # 03:17 UTC. Off the hour on purpose: scheduled workflows queue against
     # everyone else's, and the top of the hour is the worst time to ask for
-    # four Zabbix stacks' worth of runner.
+    # multiple Zabbix stacks' worth of runner.
     - cron: '17 3 * * *'
   workflow_dispatch:
 
@@ -20,14 +20,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - version: "60"
-            label: "6.0 LTS (floor)"
-            gating: true
-          - version: "70"
-            label: "7.0 LTS"
-            gating: true
           - version: "74"
-            label: "7.4"
+            label: "7.4 (floor)"
             gating: true
           # 8.0 tracks the `ubuntu-trunk` nightly image: it moves under us
           # between runs and can break upstream for reasons that have nothing
@@ -120,7 +114,7 @@ jobs:
 
           body=$(cat <<EOF
           The nightly acceptance run failed on at least one release-gating Zabbix
-          version (6.0, 7.0, 7.4).
+          version (7.4).
 
           Run: $RUN_URL
           Commit: \`${{ github.sha }}\`

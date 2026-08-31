@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // Backend-type checking for the item / prototype / LLD triad.

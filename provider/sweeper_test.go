@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // TestMain routes `-sweep`/`-sweep-run` invocations to the sweepers
@@ -92,10 +92,15 @@ func sweepTestHostAndTemplateIDs(api *zabbix.API) ([]string, error) {
 }
 
 func init() {
-	// Deletion order matters: Zabbix refuses to delete a host/template group
-	// that still contains members, and refuses to delete an item that a
-	// graph still references. So: graphs, then items, then hosts/templates,
-	// then the groups that contained them.
+	resource.AddTestSweepers("zabbix_action_trigger", &resource.Sweeper{
+		Name: "zabbix_action_trigger",
+		F:    sweepActionTriggers,
+	})
+
+	// Deletion order matters: actions can reference hosts and groups, Zabbix
+	// refuses to delete a host/template group that still contains members,
+	// and refuses to delete an item that a graph still references. So:
+	// actions and graphs, then items, then hosts/templates, then groups.
 	resource.AddTestSweepers("zabbix_graph", &resource.Sweeper{
 		Name: "zabbix_graph",
 		F:    sweepGraphs,
@@ -109,13 +114,13 @@ func init() {
 
 	resource.AddTestSweepers("zabbix_host", &resource.Sweeper{
 		Name:         "zabbix_host",
-		Dependencies: []string{"zabbix_item"},
+		Dependencies: []string{"zabbix_action_trigger", "zabbix_item"},
 		F:            sweepHosts,
 	})
 
 	resource.AddTestSweepers("zabbix_template", &resource.Sweeper{
 		Name:         "zabbix_template",
-		Dependencies: []string{"zabbix_item"},
+		Dependencies: []string{"zabbix_action_trigger", "zabbix_item"},
 		F:            sweepTemplates,
 	})
 
@@ -138,6 +143,35 @@ func init() {
 		Dependencies: []string{"zabbix_template"},
 		F:            sweepTemplateGroups,
 	})
+}
+
+func sweepActionTriggers(_ string) error {
+	api, err := testSweepAPI()
+	if err != nil {
+		return err
+	}
+
+	actions, err := api.ActionsGet(zabbix.Params{
+		"output":      []string{"actionid"},
+		"search":      zabbix.Params{"name": sweepTestPrefix},
+		"startSearch": true,
+		"filter":      zabbix.Params{"eventsource": []int{0}},
+	})
+	if err != nil {
+		return fmt.Errorf("listing trigger actions to sweep: %w", err)
+	}
+	if len(actions) == 0 {
+		return nil
+	}
+
+	ids := make([]string, len(actions))
+	for i, action := range actions {
+		ids[i] = action.ActionID
+	}
+	if err := api.ActionsDeleteByIDs(ids); err != nil {
+		return fmt.Errorf("deleting %d trigger action(s): %w", len(ids), err)
+	}
+	return nil
 }
 
 func sweepGraphs(_ string) error {

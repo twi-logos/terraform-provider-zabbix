@@ -15,7 +15,7 @@ import (
 	ctymsgpack "github.com/hashicorp/go-cty/cty/msgpack"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // TestTypeSetStateUpgraders checks that every resource whose collection became

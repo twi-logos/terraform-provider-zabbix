@@ -34,7 +34,7 @@ make docs-check       # if you touched a schema, a template or an example
 make testacc          # if you touched provider or client code (needs Docker)
 ```
 
-`make testacc` runs 6.0, 7.0 and 7.4 — the release gate. `make testall` adds
+`make testacc` runs 7.4 — the release gate. `make testall` adds
 8.0, which is reported but never blocking.
 
 ---
@@ -134,7 +134,8 @@ The constants live in `internal/zabbix/base.go`:
 | `zabbix.V72` | 7.2 | `selectHostGroups`/`selectTemplateGroups` replace `selectGroups` |
 | `zabbix.V74` | 7.4 | template `readme`/`wizard_ready` — its only use in the tree today |
 
-6.0 is the floor, so **no gate below `V62` is meaningful** — do not add one.
+7.4 is the floor. Do not add behavior for an older server version. Existing
+older gates may still document state migration or historical API differences.
 Add a new constant rather than a literal when a new version needs one; see
 [MAINTAINING.md](./MAINTAINING.md#4-gate-the-deltas).
 

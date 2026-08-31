@@ -112,7 +112,7 @@ type API struct {
 // nothing, so the client stays usable on its own terms.
 func userAgent(s string) string {
 	if s == "" {
-		return "github.com/tpretz/terraform-provider-zabbix"
+		return "github.com/twi-logos/terraform-provider-zabbix"
 	}
 	return s
 }
@@ -198,6 +198,10 @@ func NewAPI(c Config) (api *API, err error) {
 	var version int64
 	version, err = parseVersionString(rawVersion)
 	if err != nil {
+		return
+	}
+	if version < V74 {
+		err = fmt.Errorf("Zabbix 7.4 or newer is required; server reports %s", rawVersion)
 		return
 	}
 	api.Config.Version = int(version)

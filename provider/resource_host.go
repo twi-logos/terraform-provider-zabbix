@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // HSNMP_LOOKUP_ARR lists the valid values of the host interface "snmp_version"

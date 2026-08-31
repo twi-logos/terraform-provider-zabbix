@@ -11,39 +11,24 @@ template groups, proxies, items, item prototypes, low-level discovery rules,
 triggers and graphs — over the Zabbix JSON-RPC API.
 
 ~> **Upgrading from `v0.17.0`?** `v2.0.0` is deliberately a breaking release:
-the minimum Zabbix version moved to 6.0, `zabbix_application` and the two
+the minimum Zabbix version moved to 7.4, `zabbix_application` and the two
 aggregate item resources were removed, and four collections became sets —
 `graph.item`, `host.interface`, the LLD filter `condition`, and `macro` on
 hosts and templates, none of which can be indexed with `[0]` any more. Read
-the [upgrade guide](https://github.com/tpretz/terraform-provider-zabbix/blob/v2/MIGRATING.md)
+the [upgrade guide](https://github.com/twi-logos/terraform-provider-zabbix/blob/v2/MIGRATING.md)
 before you plan.
 
 ## Zabbix version support
 
 | Tier | Versions | Commitment |
 |---|---|---|
-| Supported — CI-gated | 6.0 LTS, 7.0 LTS, 7.4 | the full acceptance suite must pass before a release |
+| Supported — CI-gated | 7.4 and later stable releases | the full acceptance suite must pass before a release |
 | Early warning — non-blocking | 8.0 (`ubuntu-trunk` nightly) | in the test matrix, reported but never gating |
-| Dropped | 4.0, 5.0, 5.4 | code paths deleted, not merely untested |
-
-The floor tracks Zabbix's own limited-support window: 6.0 leaves limited
-support on **2027-02-28**, at which point the floor moves to 7.0.
+| Dropped | all versions below 7.4 | provider configuration rejects these servers |
 
 The provider probes `apiinfo.version` when it configures, before authenticating,
-and adapts to the server it finds: bearer-token auth on 6.4+, the rewritten
-proxy model on 7.0+, `selectHostGroups` / `selectTemplateGroups` on 7.2+. There
-is nothing to configure. An attribute that does not exist on your server is
-refused rather than silently dropped — from Zabbix 7.0 an unknown property is a
-hard API error, and a value quietly discarded is worse than one rejected.
-
-Everything is available on Zabbix 6.0 except:
-
-| Resource / attribute | Minimum |
-|---|---|
-| `zabbix_templategroup`, `data.zabbix_templategroup` | 6.2 |
-| `zabbix_template.groups` means *template* group ids | 6.2 (host group ids below) |
-| `zabbix_template.vendor_name`, `.vendor_version` | 6.4 |
-| `zabbix_template.readme`, `.wizard_ready` | 7.4 |
+and rejects servers below Zabbix 7.4. There is nothing to configure. Every
+resource and attribute requires Zabbix 7.4 or newer.
 
 ## Authentication
 
@@ -62,7 +47,7 @@ written into configuration: `ZABBIX_URL` (or `ZABBIX_SERVER_URL`),
 terraform {
   required_providers {
     zabbix = {
-      source  = "tpretz/zabbix"
+      source  = "twi-logos/zabbix"
       version = "~> 2.0"
     }
   }
@@ -110,7 +95,7 @@ provider "zabbix" {
 - `password` (String, Sensitive) Zabbix API password. Falls back to $ZABBIX_PASS or $ZABBIX_PASSWORD
 - `serialize` (Boolean) Send mutating API requests one at a time (default `true`). This is a workaround for concurrency bugs in Zabbix, not a tuning knob: template inheritance does read-modify-write against shared parent objects, and Terraform's default parallelism of 10 drives exactly that path whenever a configuration links several hosts to one template. The observed symptom is a host that ends up with a template's items and none of its triggers, silently, surfacing much later as an unrelated `Database error occurred`. Read requests are never serialized, so `plan` and `refresh` are unaffected. **This only protects a single `terraform apply`** — the lock lives in one provider process, so two concurrent applies, or Terraform racing a change made in the Zabbix UI, will still collide. Set to `false` only if you are confident your configuration cannot race and you need the speed.
 - `tls_insecure` (Boolean) Skip TLS certificate verification when talking to the API. **Testing only.** This disables both certificate *and* hostname verification, so the provider will hand its credentials — the password or API token, and every PSK, IPMI password and SNMPv3 passphrase in the configuration — to whatever answers on that address. There is deliberately no environment-variable fallback for this argument
-- `token` (String, Sensitive) Zabbix API token (Zabbix 5.4 and later). Used instead of username and password: the provider sends it directly and skips the login call. Falls back to $ZABBIX_TOKEN
+- `token` (String, Sensitive) Zabbix API token. Used instead of username and password: the provider sends it directly and skips the login call. Falls back to $ZABBIX_TOKEN
 - `username` (String) Zabbix API username. Give either username and password, or token. Falls back to $ZABBIX_USER or $ZABBIX_USERNAME
 
 ## Importing

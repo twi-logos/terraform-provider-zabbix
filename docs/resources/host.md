@@ -17,7 +17,7 @@ in. They are therefore a `TypeSet`, and **set elements cannot be indexed** —
 `zabbix_host.example.interface[0].id` does not parse. Use `one(...)` for a host
 with a single interface, or a `for` expression with an `if` clause to pick one
 out by type or address. See
-[MIGRATING.md](https://github.com/tpretz/terraform-provider-zabbix/blob/v2/MIGRATING.md#6-sets-not-lists--and-sets-cannot-be-indexed)
+[MIGRATING.md](https://github.com/twi-logos/terraform-provider-zabbix/blob/v2/MIGRATING.md#6-sets-not-lists--and-sets-cannot-be-indexed)
 if you are upgrading from `v0.17.0`.
 
 Zabbix will not delete an interface that items are bound to. When an interface
@@ -27,9 +27,7 @@ type rather than asking for a delete-and-recreate.
 ## Proxy assignment
 
 `proxyid` is the id of the proxy monitoring this host, or `"0"` for the Zabbix
-server itself. On Zabbix 7.0 and later the provider also sets `monitored_by`
-to match; below 7.0 it writes the old `proxy_hostid` property. The
-configuration is the same either way.
+server itself. The provider sets `monitored_by` to match.
 
 ## Write-only attributes
 
@@ -111,7 +109,7 @@ output "agent_interface_id" {
 - `macro` (Block Set) User macros defined on this object (unordered). Zabbix replaces the whole macro collection on update, so omitting a macro removes it. (see [below for nested schema](#nestedblock--macro))
 - `name` (String) Host display name, as shown in the frontend. Defaults to `host`: leave it out and the provider derives it, in the plan rather than after apply, and keeps it in step with a later `host` rename for as long as the two are equal. Set it to anything else and it is yours -- a rename then leaves it alone, and so does deleting the line, which changes nothing at all because Terraform keeps the last value it read. Write `host`'s value out to go back to the derived name
 - `proxyid` (String) ID of the proxy monitoring this host, or "0" for the Zabbix server itself. Sets `monitored_by` accordingly on Zabbix 7.0 and later
-- `tag` (Block Set) Tags applied to this object (unordered). Tags are how Zabbix 5.4 and later group and filter objects; they replaced applications. Zabbix replaces the whole tag collection on update, so omitting a tag removes it. (see [below for nested schema](#nestedblock--tag))
+- `tag` (Block Set) Tags applied to this object (unordered). Tags group and filter objects; they replaced applications. Zabbix replaces the whole tag collection on update, so omitting a tag removes it. (see [below for nested schema](#nestedblock--tag))
 - `templates` (Set of String) Template IDs linked to this host. Removing a template here unlinks and clears it
 - `tls_accept` (String) Encryption accepted for incoming connections from the host, one of: cert, psk, unencrypted. Zabbix stores this as a bitmask and the frontend allows combinations; only a single mode is expressible here
 - `tls_connect` (String) Encryption used for outgoing connections to the host, one of: cert, psk, unencrypted

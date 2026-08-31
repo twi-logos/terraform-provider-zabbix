@@ -79,20 +79,10 @@ x-web: &web
 # the same environment. Refresh them deliberately, not implicitly.
 
 services:
-  # Zabbix 6.0 LTS — version floor. Web UI: http://localhost:8060/
-  zabbix-db-60:     { <<: *db, image: postgres:15-alpine }
-  zabbix-server-60: { <<: *server, image: "zabbix/zabbix-server-pgsql:ubuntu-6.0.48",     environment: { <<: *db-env, DB_SERVER_HOST: zabbix-db-60 }, depends_on: { zabbix-db-60: { condition: service_healthy } } }
-  zabbix-web-60:    { <<: *web,    image: "zabbix/zabbix-web-nginx-pgsql:ubuntu-6.0.48", ports: ["8060:8080"], environment: { <<: *web-env, DB_SERVER_HOST: zabbix-db-60, ZBX_SERVER_HOST: zabbix-server-60 }, depends_on: { zabbix-db-60: { condition: service_healthy }, zabbix-server-60: { condition: service_started } } }
-
-  # Zabbix 7.0 LTS. Web UI: http://localhost:8070/
-  zabbix-db-70:     { <<: *db, image: postgres:16-alpine }
-  zabbix-server-70: { <<: *server, image: "zabbix/zabbix-server-pgsql:ubuntu-7.0.29",     environment: { <<: *db-env, DB_SERVER_HOST: zabbix-db-70 }, depends_on: { zabbix-db-70: { condition: service_healthy } } }
-  zabbix-web-70:    { <<: *web,    image: "zabbix/zabbix-web-nginx-pgsql:ubuntu-7.0.29", ports: ["8070:8080"], environment: { <<: *web-env, DB_SERVER_HOST: zabbix-db-70, ZBX_SERVER_HOST: zabbix-server-70 }, depends_on: { zabbix-db-70: { condition: service_healthy }, zabbix-server-70: { condition: service_started } } }
-
-  # Zabbix 7.4 — current release. Web UI: http://localhost:8074/
+  # Zabbix 7.4 — supported version floor. Web UI: http://localhost:8074/
   zabbix-db-74:     { <<: *db, image: postgres:17-alpine }
-  zabbix-server-74: { <<: *server, image: "zabbix/zabbix-server-pgsql:ubuntu-7.4.13",     environment: { <<: *db-env, DB_SERVER_HOST: zabbix-db-74 }, depends_on: { zabbix-db-74: { condition: service_healthy } } }
-  zabbix-web-74:    { <<: *web,    image: "zabbix/zabbix-web-nginx-pgsql:ubuntu-7.4.13", ports: ["8074:8080"], environment: { <<: *web-env, DB_SERVER_HOST: zabbix-db-74, ZBX_SERVER_HOST: zabbix-server-74 }, depends_on: { zabbix-db-74: { condition: service_healthy }, zabbix-server-74: { condition: service_started } } }
+  zabbix-server-74: { <<: *server, image: "zabbix/zabbix-server-pgsql:ubuntu-7.4.14",     environment: { <<: *db-env, DB_SERVER_HOST: zabbix-db-74 }, depends_on: { zabbix-db-74: { condition: service_healthy } } }
+  zabbix-web-74:    { <<: *web,    image: "zabbix/zabbix-web-nginx-pgsql:ubuntu-7.4.14", ports: ["8074:8080"], environment: { <<: *web-env, DB_SERVER_HOST: zabbix-db-74, ZBX_SERVER_HOST: zabbix-server-74 }, depends_on: { zabbix-db-74: { condition: service_healthy }, zabbix-server-74: { condition: service_started } } }
 
   # Zabbix 8.0 LTS — EARLY WARNING, NON-BLOCKING.
   #

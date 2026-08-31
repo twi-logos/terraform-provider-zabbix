@@ -9,7 +9,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // R1-R2 -- removing an attribute from the configuration (PLAN.md § "The unit
@@ -104,6 +104,29 @@ import (
 // A key is "<resource>.<dotted attribute path>", and only one resource per
 // shared declaration needs naming; see the note on updateOwner.
 var removalOwner = map[string]string{
+	"zabbix_action_trigger.escalation_period":                                          "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.notify_if_canceled":                                         "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.operations.condition_evaluation_type":                       "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.operations.escalation_period":                               "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.operations.escalation_step_from":                            "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.operations.escalation_step_to":                              "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.operations.remote_command.current_host":                     "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.operations.send_message.media_type_id":                      "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.operations.send_message.use_default_message":                "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.pause_suppressed":                                           "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.pause_symptoms":                                             "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.recovery_operations.notify_all_involved":                    "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.recovery_operations.notify_all_message.use_default_message": "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.recovery_operations.remote_command.current_host":            "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.recovery_operations.send_message.media_type_id":             "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.recovery_operations.send_message.use_default_message":       "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.status":                                                     "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.update_operations.notify_all_involved":                      "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.update_operations.notify_all_message.media_type_id":         "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.update_operations.notify_all_message.use_default_message":   "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.update_operations.remote_command.current_host":              "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.update_operations.send_message.media_type_id":               "TestAccRemoveActionTriggerDefaults",
+	"zabbix_action_trigger.update_operations.send_message.use_default_message":         "TestAccRemoveActionTriggerDefaults",
 	"zabbix_graph.do3d":                                   "TestAccRemoveGraphDefaults",
 	"zabbix_graph.item.drawtype":                          "TestAccRemoveGraphDefaults",
 	"zabbix_graph.item.function":                          "TestAccRemoveGraphDefaults",

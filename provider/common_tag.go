@@ -3,7 +3,7 @@ package provider
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // tag list schema
@@ -25,7 +25,7 @@ var tagSetSchema = &schema.Schema{
 	Type:     schema.TypeSet,
 	Optional: true,
 	Set:      tagHash,
-	Description: "Tags applied to this object (unordered). Tags are how Zabbix 5.4 and later " +
+	Description: "Tags applied to this object (unordered). Tags " +
 		"group and filter objects; they replaced applications. Zabbix replaces the whole tag " +
 		"collection on update, so omitting a tag removes it.",
 	Elem: &schema.Resource{

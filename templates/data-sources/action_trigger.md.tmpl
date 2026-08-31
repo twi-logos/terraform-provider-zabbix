@@ -1,0 +1,26 @@
+---
+page_title: "{{.Name}} {{.Type}} - {{.RenderedProviderName}}"
+subcategory: "Actions"
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Name}} ({{.Type}})
+
+{{ .Description | trimspace }}
+
+Give exactly one of `action_id` or `name`. Name lookup is exact and fails when
+more than one visible action has the same name; use `action_id` to disambiguate.
+An empty result can also mean that Zabbix permissions hide the action.
+
+When migrating from the former Framework provider, replace its `id` lookup
+argument with `action_id`. The resolved action ID remains available as the
+standard data-source `.id`. SDK v2 represents nested singleton blocks as
+one-element lists, so expressions such as `filter.evaluation_type` become
+`filter[0].evaluation_type`.
+
+## Example Usage
+
+{{ tffile .ExampleFile }}
+
+{{ .SchemaMarkdown | trimspace }}

@@ -2,30 +2,23 @@
 page_title: "zabbix_templategroup Resource - Zabbix"
 subcategory: "Hosts and Templates"
 description: |-
-  Manages a Zabbix template group. Requires Zabbix 6.2 or later, where template groups were split out of host groups.
+  Manages a Zabbix template group.
 ---
 
 # zabbix_templategroup (Resource)
 
-Manages a Zabbix template group. Requires Zabbix 6.2 or later, where template groups were split out of host groups.
+Manages a Zabbix template group.
 
-## Requires Zabbix 6.2
+## Template groups
 
-Zabbix 6.2 split template groups out of host groups: from that release a
-template belongs to template groups and a host to host groups, and the two id
-spaces are disjoint. This resource errors on 6.0 and 6.1, where templates are
-members of host groups and [`zabbix_hostgroup`](hostgroup) should be used
-instead.
-
-`zabbix_template.groups` follows the same rule — template group ids on 6.2+,
-host group ids below — which is why upgrading a 6.2+ server from `v0.17.0`
-needs the state surgery described in
-[MIGRATING.md § 5](https://github.com/tpretz/terraform-provider-zabbix/blob/v2/MIGRATING.md#5-zabbix_templategroups-now-means-template-groups).
+A template belongs to template groups and a host belongs to host groups. Their
+id spaces are disjoint. `zabbix_template.groups` therefore takes ids from this
+resource.
 
 ## Example Usage
 
 ```terraform
-# template groups were split out of host groups in Zabbix 6.2
+# requires Zabbix 7.4 or later
 resource "zabbix_templategroup" "applications" {
   name = "Templates/Applications"
 }

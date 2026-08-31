@@ -6,7 +6,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // templateGroupsSupported reports whether the server has a separate
@@ -29,7 +29,7 @@ func errTemplateGroupUnsupported(m interface{}) error {
 // resourceTemplategroup terraform resource handler
 func resourceTemplategroup() *schema.Resource {
 	return &schema.Resource{
-		Description: "Manages a Zabbix template group. Requires Zabbix 6.2 or later, where template groups were split out of host groups.",
+		Description: "Manages a Zabbix template group.",
 		Create:      resourceTemplategroupCreate,
 		Read:        resourceTemplategroupRead,
 		Update:      resourceTemplategroupUpdate,
@@ -52,7 +52,7 @@ func resourceTemplategroup() *schema.Resource {
 // dataTemplategroup terraform data handler
 func dataTemplategroup() *schema.Resource {
 	return &schema.Resource{
-		Description: "Looks up an existing Zabbix template group by name. Requires Zabbix 6.2 or later.",
+		Description: "Looks up an existing Zabbix template group by name.",
 		Read:        dataTemplategroupRead,
 
 		Schema: map[string]*schema.Schema{

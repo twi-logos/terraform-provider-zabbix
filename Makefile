@@ -12,11 +12,9 @@ COMPOSE      ?= docker compose -f $(COMPOSE_FILE)
 #   GATED     the release-gating subset — `make testacc`
 #             8.0 is excluded on purpose: it tracks the `ubuntu-trunk` nightly
 #             and must never block a release. `make testall` adds it.
-VERSIONS := 60 70 74 80
-GATED    := 60 70 74
+VERSIONS := 74 80
+GATED    := 74
 
-ZBX_PORT_60 := 8060
-ZBX_PORT_70 := 8070
 ZBX_PORT_74 := 8074
 ZBX_PORT_80 := 8080
 
@@ -67,7 +65,7 @@ export ZABBIX_USER
 export ZABBIX_PASS
 
 # Acceptance run for one version. Logs land in provider/acc-<ver>.log so a
-# four-version run leaves four separately readable logs.
+# matrix run leaves separately readable logs for each version.
 define run_acc
 	@echo "==> zabbix $(1): $(call zbx_url,$(1))"
 	ZABBIX_URL=$(call zbx_url,$(1)) \
@@ -90,7 +88,7 @@ vet: ## go vet
 
 .PHONY: test
 test: ## Unit tests only (no Zabbix server needed)
-	TF_ACC= go test ./provider/
+	TF_ACC= go test ./...
 
 # --- toolchain pin consistency ----------------------------------------------
 #
@@ -218,7 +216,7 @@ sweep: ## Delete leftover test-* objects from every stack (recovers an aborted r
 #
 # One target for RELEASING.md step 0, so a full check is one command and one
 # walk-away rather than a dozen prompts. Takes roughly 30 minutes: the local
-# checks are seconds, the four acceptance runs are ~6.5 minutes each.
+# checks are seconds, while each acceptance run takes several minutes.
 #
 # Sweeps before each version rather than once at the start, because a failure
 # part-way through leaves objects behind that would fail the next version with
@@ -261,7 +259,7 @@ release-gate: ## Everything RELEASING.md step 0 checks, in one run (~30 min)
 	exit $$rc
 
 .PHONY: testacc
-testacc: ## Acceptance tests on the release-gating versions (6.0/7.0/7.4)
+testacc: ## Acceptance tests on the release-gating version (7.4)
 	@rc=0; for v in $(GATED); do $(MAKE) test$$v || rc=1; done; exit $$rc
 
 .PHONY: testall

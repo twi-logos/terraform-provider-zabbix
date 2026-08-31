@@ -5,7 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
-	"github.com/tpretz/terraform-provider-zabbix/internal/zabbix"
+	"github.com/twi-logos/terraform-provider-zabbix/internal/zabbix"
 )
 
 // testAccCheckDestroyed returns a resource.TestCheckFunc that verifies every
@@ -115,6 +115,14 @@ func testAccProtoGraphExists(api *zabbix.API, id string) (bool, error) {
 	return len(res) > 0, err
 }
 
+func testAccActionTriggerExists(api *zabbix.API, id string) (bool, error) {
+	res, err := api.ActionsGet(zabbix.Params{
+		"actionids": []string{id},
+		"filter":    zabbix.Params{"eventsource": []int{0}},
+	})
+	return len(res) > 0, err
+}
+
 // testAccCheckAllDestroyed is the CheckDestroy attached to every acceptance
 // test in this package. Rather than hand-picking which of the object types
 // above a given test's config happens to create, it checks all of them --
@@ -124,6 +132,7 @@ func testAccProtoGraphExists(api *zabbix.API, id string) (bool, error) {
 // covered automatically.
 func testAccCheckAllDestroyed(s *terraform.State) error {
 	return resource.ComposeAggregateTestCheckFunc(
+		testAccCheckDestroyed("zabbix_action_trigger", testAccActionTriggerExists),
 		testAccCheckDestroyed("zabbix_hostgroup", testAccHostGroupExists),
 		testAccCheckDestroyed("zabbix_templategroup", testAccTemplateGroupExists),
 		testAccCheckDestroyed("zabbix_host", testAccHostExists),

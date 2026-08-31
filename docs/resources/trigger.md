@@ -78,7 +78,7 @@ resource "zabbix_trigger" "cpu_high_with_recovery" {
 - `priority` (String) Severity of problems this trigger raises, one of: not_classified, info, warn, average, high, disaster (listed lowest first)
 - `recovery_expression` (String) Separate expression that closes the problem. Leave empty to close when the problem expression stops being true; requires recovery_none to be false. Built from interpolated resource references exactly as `expression` is
 - `recovery_none` (Boolean) Never close the problem automatically. Mutually exclusive with recovery_expression
-- `tag` (Block Set) Tags applied to this object (unordered). Tags are how Zabbix 5.4 and later group and filter objects; they replaced applications. Zabbix replaces the whole tag collection on update, so omitting a tag removes it. (see [below for nested schema](#nestedblock--tag))
+- `tag` (Block Set) Tags applied to this object (unordered). Tags group and filter objects; they replaced applications. Zabbix replaces the whole tag collection on update, so omitting a tag removes it. (see [below for nested schema](#nestedblock--tag))
 - `url` (String) URL shown with the problem, e.g. a runbook. Must be http or https, or empty
 
 ### Read-Only

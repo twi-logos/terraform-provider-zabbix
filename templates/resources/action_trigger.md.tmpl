@@ -1,0 +1,24 @@
+---
+page_title: "{{.Name}} {{.Type}} - {{.RenderedProviderName}}"
+subcategory: "Actions"
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Name}} ({{.Type}})
+
+{{ .Description | trimspace }}
+
+## Example Usage
+
+{{ tffile .ExampleFile }}
+
+## Missing or Hidden Actions
+
+If `action.get` does not return a managed action, the provider keeps the resource in state and returns an error. Zabbix can hide an existing action when the API user loses permission, so an empty response is not treated as proof of deletion. Restore the API user's access or remove the resource from state explicitly after confirming that the action was deleted.
+
+{{ .SchemaMarkdown | trimspace }}
+
+## Import
+
+{{ codefile "shell" .ImportFile }}

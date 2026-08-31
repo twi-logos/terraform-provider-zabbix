@@ -4,7 +4,7 @@ import (
 	"flag"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/tpretz/terraform-provider-zabbix/provider"
+	"github.com/twi-logos/terraform-provider-zabbix/provider"
 )
 
 // version and commit are set by the linker at release time, from the ldflags in
@@ -34,7 +34,7 @@ func main() {
 
 	plugin.Serve(&plugin.ServeOpts{
 		ProviderFunc: provider.Provider,
-		ProviderAddr: "registry.terraform.io/tpretz/zabbix",
+		ProviderAddr: "registry.terraform.io/twi-logos/zabbix",
 		Debug:        debug,
 	})
 }

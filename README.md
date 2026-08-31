@@ -37,35 +37,17 @@ the Terraform Registry. It is generated from the provider schema by
 
 | Tier | Versions | Commitment |
 |---|---|---|
-| **Supported** — CI-gated, release-blocking | 6.0 LTS, 7.0 LTS, 7.4 | the full acceptance suite must pass before a release is cut |
+| **Supported** — CI-gated, release-blocking | 7.4 and later stable releases | the full acceptance suite must pass before a release is cut |
 | **Early warning** — non-blocking | 8.0, via the `ubuntu-trunk` nightly | in the test matrix, reported but never gating; promoted to release-blocking on GA |
-| **Dropped** | 4.0, 5.0, 5.4 | the code paths are deleted, not merely untested |
-
-The floor tracks Zabbix's own limited-support window: **6.0 leaves limited
-support on 2027-02-28, at which point the floor moves to 7.0** and the 6.0 stack
-is dropped from the matrix.
+| **Dropped** | all versions below 7.4 | provider configuration rejects these servers |
 
 The provider detects the server version at configure time (`apiinfo.version`,
-unauthenticated) and adapts: bearer-token auth on 6.4+, `selectHostGroups` /
-`selectTemplateGroups` on 7.2+, the rewritten proxy model on 7.0+, and so on.
-You do not configure the version — but a resource or attribute that does not
-exist on your server is refused rather than silently dropped, because from
-Zabbix 7.0 an unknown property is a hard API error.
+unauthenticated). You do not configure the version. Servers below Zabbix 7.4
+are rejected before authentication.
 
 ### Minimum Zabbix version per resource
 
-Everything is available on 6.0 unless listed here.
-
-| Resource / attribute | Minimum |
-|---|---|
-| `zabbix_templategroup`, `data.zabbix_templategroup` | **6.2** |
-| `zabbix_template.groups` means *template* group ids | **6.2** (host group ids on 6.0/6.1 — see [MIGRATING.md §5](./MIGRATING.md#5-zabbix_templategroups-now-means-template-groups)) |
-| `zabbix_template.vendor_name`, `.vendor_version` | **6.4** |
-| `zabbix_template.readme`, `.wizard_ready` | **7.4** |
-
-`zabbix_proxy` and `zabbix_host`'s proxy assignment are modelled on the 7.0
-object (`proxyid` + `monitored_by`) and translated back to the pre-7.0
-(`proxy_hostid`) shape automatically, so they work unchanged from 6.0.
+Every resource and attribute requires Zabbix 7.4 or newer.
 
 ## Installation
 
@@ -73,7 +55,7 @@ object (`proxyid` + `monitored_by`) and translated back to the pre-7.0
 terraform {
   required_providers {
     zabbix = {
-      source  = "tpretz/zabbix"
+      source  = "twi-logos/zabbix"
       version = "~> 2.0"
     }
   }
@@ -90,7 +72,7 @@ provider "zabbix" {
   username = "Admin"
   password = "zabbix"
 
-  # ... or an API token (Zabbix 5.4+)
+  # ... or an API token
   # token = "..."
 }
 ```
@@ -114,9 +96,9 @@ Two attributes cannot be imported, because the Zabbix API never returns them:
 
 ## Scope — read this before adopting
 
-Everything in [`docs/resources/`](./docs/resources) works, is current with
-Zabbix 6.0 through 8.0, and is tested against all four on every change. What is
-covered is covered properly.
+Everything in [`docs/resources/`](./docs/resources) works with Zabbix 7.4 or
+newer. Zabbix 7.4 is release-gating; 8.0 trunk is tested as non-blocking early
+warning until it reaches GA.
 
 **It does not manage alerting.** Hosts, templates, items, triggers, graphs,
 discovery rules and proxies are all here — but `action`, `mediatype`,
