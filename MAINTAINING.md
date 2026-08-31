@@ -111,6 +111,27 @@ Terraform is pinned once, in `.tool-versions`. The `Makefile` resolves the
 binary and hands it to the harness as `TF_ACC_TERRAFORM_PATH`; the nightly reads
 the same line with `awk`. Do not hardcode it anywhere else.
 
+### Accepted robustness risks
+
+**Non-string login or version results can panic the provider.** `Login` and
+`Version` assert that successful `user.login` and `apiinfo.version` JSON-RPC
+results are strings. A syntactically valid success response with `result` set
+to `null`, a number, an object, or omitted can therefore panic instead of
+returning a diagnostic. This can occur during provider initialization or
+authentication.
+
+Accepted on 2026-08-31. Supported Zabbix servers return strings for both calls,
+while malformed JSON, transport failures, and JSON-RPC error responses already
+return normal errors. The remaining exposure is limited to a misconfigured
+URL, a response-rewriting intermediary, an incompatible implementation, or a
+compromised endpoint. This is accepted as a diagnostics and robustness limit,
+not supported server behavior.
+
+Revisit this decision if the failure is observed against a supported Zabbix
+release, appears in user reports, or the JSON-RPC response handling is changed.
+The fix is to use checked type assertions in both methods and add malformed
+result tests with `httptest`.
+
 ---
 
 ## Runbook: a new Zabbix version
