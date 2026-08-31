@@ -147,8 +147,8 @@ func TestGraphItemHashCoversEveryField(t *testing.T) {
 // ---------------------------------------------------------------------------
 // The v0.17.0 state fixtures
 //
-// testdata/v0.17.0-state.json          - Terraform 0.12+ state (JSON attributes)
-// testdata/v0.17.0-state-flatmap.json  - Terraform 0.11 state (flatmap attributes)
+// ../testdata/v0.17.0-state.json          - Terraform 0.12+ state (JSON attributes)
+// ../testdata/v0.17.0-state-flatmap.json  - Terraform 0.11 state (flatmap attributes)
 //
 // Both were written by provider v0.17.0 and between them contain every shape
 // v2.0.0 changes: `applications` and the legacy SNMP item attributes that no
@@ -162,8 +162,8 @@ func TestGraphItemHashCoversEveryField(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 const (
-	fixtureJSONPath    = "testdata/v0.17.0-state.json"
-	fixtureFlatmapPath = "testdata/v0.17.0-state-flatmap.json"
+	fixtureJSONPath    = "../testdata/v0.17.0-state.json"
+	fixtureFlatmapPath = "../testdata/v0.17.0-state-flatmap.json"
 )
 
 // loadJSONFixture returns the fixture's resources keyed by "<type>.<name>",

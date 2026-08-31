@@ -90,6 +90,14 @@ vet: ## go vet
 test: ## Unit tests only (no Zabbix server needed)
 	TF_ACC= go test ./...
 
+.PHONY: fmt-check
+fmt-check: ## Check Go formatting without treating CRLF as a source change
+	@out=$$(while IFS= read -r -d '' file; do \
+		cmp -s <(sed 's/\r$$//' "$$file") <(gofmt "$$file") || printf '%s\n' "$$file"; \
+	done < <(find . -type f -name '*.go' -print0)); \
+	test -z "$$out" || { echo "gofmt: $$out"; exit 1; }; \
+	echo "gofmt: clean"
+
 # --- toolchain pin consistency ----------------------------------------------
 #
 # The Go version is pinned in three places and they have to stay consistent:
@@ -147,7 +155,7 @@ TFPLUGINDOCS         := go run github.com/hashicorp/terraform-plugin-docs/cmd/tf
 # the version-manager shim problem TF_ACC_TERRAFORM_PATH solves for the test
 # harness -- but it has no equivalent flag, so the resolved binary's directory
 # goes on PATH ahead of the shim instead.
-DOCS_PATH := $(dir $(TERRAFORM_BIN)):$(PATH)
+DOCS_PATH := $(dir $(TERRAFORM_BIN)):$$PATH
 
 .PHONY: docs
 docs: ## Regenerate docs/ from the provider schema, templates/ and examples/
@@ -230,7 +238,7 @@ release-gate: ## Everything RELEASING.md step 0 checks, in one run (~30 min)
 	@$(MAKE) --no-print-directory check-toolchain
 	@$(MAKE) --no-print-directory build
 	@$(MAKE) --no-print-directory vet
-	@out=$$(gofmt -l .); test -z "$$out" || { echo "gofmt: $$out"; exit 1; }; echo "gofmt: clean"
+	@$(MAKE) --no-print-directory fmt-check
 	@TF_ACC= go test ./... -count=1 || exit 1   # TF_ACC= or this runs the acceptance suite
 	@$(MAKE) --no-print-directory docs-check
 	@echo

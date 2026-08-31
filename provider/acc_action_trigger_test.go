@@ -534,6 +534,7 @@ func TestAccUpdateActionTrigger(t *testing.T) {
 					}),
 				),
 			},
+			{RefreshState: true},
 			{
 				ResourceName:      addr,
 				ImportState:       true,
@@ -806,6 +807,7 @@ func TestAccRemoveActionTriggerDefaults(t *testing.T) {
 					}),
 				),
 			},
+			{RefreshState: true},
 		},
 	})
 }
